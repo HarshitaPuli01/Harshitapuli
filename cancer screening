@@ -1,0 +1,62 @@
+// This is our patient information
+const patient = {
+  name: "Maria Garcia",
+  age: 42,
+  hasFamilyHistory: true,
+  lastScreening: "2023-01-15"
+};
+
+// Calculate risk level
+function calculateRisk(patient) {
+  let risk = 0;
+  if (patient.age > 40) risk += 1;
+  if (patient.hasFamilyHistory) risk += 2;
+  return risk;
+}
+
+// Get screening recommendation
+function getScreening(risk) {
+  if (risk > 2) return "Next screening in 6 months";
+  return "Next screening in 1 year";
+}
+
+// Put it all together
+const risk = calculateRisk(patient);
+const recommendation = getScreening(risk);
+
+console.log(`Patient: ${patient.name}`);
+console.log(`Risk Score: ${risk}`);
+console.log(`Recommendation: ${recommendation}`);
+const patients = require('./data/patients.json');
+
+function calculateRisk(patient, cancerType) {
+  let risk = 0;
+  
+  // Age risk
+  if (patient.age > 50) risk += 2;
+  else if (patient.age > 40) risk += 1;
+  
+  // Family history
+  if (patient.riskFactors.familyHistory) risk += 2;
+  
+  // Cancer-specific risks
+  if (cancerType === 'lung' && patient.riskFactors.smoking) risk += 3;
+  
+  return risk;
+}
+
+patients.forEach(patient => {
+  console.log(`\nPatient: ${patient.name}`);
+  
+  // Check breast cancer screening for women
+  if (patient.gender === 'female') {
+    const risk = calculateRisk(patient, 'breast');
+    console.log(`- Breast cancer risk: ${risk}`);
+  }
+  
+  // Check colorectal for everyone over 45
+  if (patient.age >= 45) {
+    const risk = calculateRisk(patient, 'colorectal');
+    console.log(`- Colorectal cancer risk: ${risk}`);
+  }
+});
